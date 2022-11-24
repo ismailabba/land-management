@@ -39,6 +39,17 @@ describe('Escrow', () => {
               surveyorGeneral.address, 
               lender.address
           )
+
+
+          //approve propery
+          // Approve Property
+         transaction = await landManagement.connect(seller).approve(escrow.address, 1)
+         await transaction.wait()
+
+         // List Property
+        transaction = await escrow.connect(seller).list(1)
+        await transaction.wait()
+
   
     })
 
@@ -65,14 +76,17 @@ describe('Escrow', () => {
             expect(result).to.be.equal(lender.address)
         })
     })
-
-    it('saves the addresses', async() => {
+    describe('listing', () => {
         
+        it('updates ownership', async() => {
+            expect(await landManagement.ownerOf(1)).to.be.equal(escrow.address)
+        })
+        it('updates oto listed', async() => {
+            const result = await escrow.isListed(1)
+            expect(result).to.be.equal(true)
+        })
       
-       
-
-        
-
-
+      
     })
+
 })
